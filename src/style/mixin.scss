@@ -1,0 +1,102 @@
+// 单行文字省略号显示
+@mixin text-ellipsis() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// 多行文字省略号显示
+@mixin text-ellipsis-multi($line) {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+}
+
+// 弹性居中
+@mixin flex-center($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: center;
+  justify-content: center;
+}
+
+// 弹性两端对齐
+@mixin flex-between($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// 弹性两端对齐
+@mixin flex-around($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: center;
+  justify-content: space-around;
+}
+
+@mixin flex-general($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: $align;
+  justify-content: $justify;
+}
+
+
+//图标i的块状显示
+@mixin i-inline-block($width: 50px, $height: 50px) {
+  display: inline-block;
+  text-align: center;
+  width: $width;
+  height: $height;
+  line-height: $height;
+}
+
+
+// 盒子阴影
+@mixin box-shadow {
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+
+// 图片拉伸
+@mixin img-wrap($width, $height: $width) {
+  width: $width;
+  height: $height;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+
+// 绝对定位拉伸
+@mixin abs-stretch {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  right: 0;
+}
+
+
+// 绝对盒子居中
+@mixin abs-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+// 圆角
+@mixin round($d) {
+  width: $d;
+  height: $d;
+  border-radius: 50%;
+}
