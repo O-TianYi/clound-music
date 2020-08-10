@@ -27,4 +27,12 @@ export const requireSongers = (params) => axios.get("api/artist/list", {
 
 
 //发现音乐----排行榜
+//排行榜的图标
 export const requireToplist = () => axios.get("api/toplist");
+
+
+//发现音乐----最新歌曲
+//获取指定类型最新歌曲
+export const requireLastestSongs = (params) => axios.get("api/top/song", {
+    params
+});

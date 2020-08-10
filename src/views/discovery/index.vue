@@ -39,11 +39,14 @@ export default {
     @include flex-center;
   }
   /deep/ .el-tabs__item {
+    padding: 0;
     width: 100px;
     text-align: center;
   }
   /deep/ .el-tabs__active-bar {
     background-color: $theme-color;
+    left: 10px;
+    width: 80px !important;
   }
   /deep/ .is-active {
     color: $theme-color;
