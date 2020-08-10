@@ -1,7 +1,5 @@
 <template>
-  <div class="main">
-    我的音乐
-  </div>
+  <div class="main">我的音乐</div>
 </template>
 
 <script>

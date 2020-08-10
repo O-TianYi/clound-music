@@ -45,11 +45,12 @@ export default {
   display: block;
   .el-menu {
     font-size: 16px;
-    padding-left: 10px;
-    padding-top: 10px;
+    padding-left: 20px;
+    padding-top: 20px;
     .title-text {
       height: 16px;
       line-height: 16px;
+      margin-bottom: 10px;
     }
     /deep/ .el-menu-item {
       height: 50px;

@@ -10,14 +10,16 @@
         <router-view />
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 
 <script>
 import Aside from "./aside";
 import Search from "./search";
+import Footer from "./footer";
 export default {
-  components: { Aside, Search },
+  components: { Aside, Search, Footer },
   data() {
     return {
       title1: "推荐",
@@ -54,11 +56,20 @@ export default {
     .aside {
       width: 200px;
       height: 100%;
+      background-color: #f5f5f7;
+      margin-left: 10px;
+      position: fixed;
+      left: 0;
+      top: 50px;
+      z-index: 9999;
       .aside-item {
         display: block;
       }
     }
     .router-view {
+      padding-top: 60px;
+      padding-left: 220px;
+      padding-right: 20px;
       flex: 1;
     }
   }

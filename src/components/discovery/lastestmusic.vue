@@ -39,6 +39,7 @@
 
 <script>
 import { requireLastestSongs } from "../../api/index";
+import { changAuthor, changDate } from "../../plugins/common"; //引入多作者拼接转换方法
 export default {
   mounted() {
     this.getLastestSongs();
@@ -63,22 +64,11 @@ export default {
     },
     //时间戳转换为时间
     changDate(date) {
-      let temp = new Date(date);
-      let m = temp.getMinutes();
-      let s = temp.getSeconds();
-      if (m < 10) m = "0" + m;
-      if (s < 10) s = "0" + s;
-      return m + ":" + s;
+      return changDate(date);
     },
     //获取作者
     changAuthor(artists) {
-      let name = "";
-      if (artists.length === 1) return artists[0].name;
-      artists.forEach((val) => {
-        if (!name) name = val.name;
-        else name += "/" + val.name;
-      });
-      return name;
+      return changAuthor(artists);
     },
   },
 };

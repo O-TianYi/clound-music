@@ -13,7 +13,7 @@
     <div class="content">
       <List :data="recommend" title="推荐音乐" />
       <List :data="exclusives" title="独家放送" />
-      <List />
+      <List1 :data="newSongs" title="每日最新" />
     </div>
 
     <footer>
@@ -27,25 +27,30 @@
 
 <script>
 import List from "../common/list";
+import List1 from "../common/list1";
 import {
   requireBanners,
   requireRecommmend,
   requirePrivatecontent,
+  requireNewSongs,
 } from "../../api/index";
 export default {
   components: {
     List,
+    List1,
   },
   mounted() {
     this.getBanners();
     this.getRecommmend();
     this.getPrivatecontent();
+    this.getNewSongs();
   },
   data() {
     return {
       banners: [], //轮播图数据
       recommend: [], //推荐歌曲
       exclusives: [], //独家放送
+      newSongs: [], //每日新歌
     };
   },
   methods: {
@@ -63,7 +68,12 @@ export default {
     async getPrivatecontent() {
       let result = await requirePrivatecontent();
       this.exclusives = result.data.result;
-      console.log(this.exclusives);
+    },
+    //获取每日新歌
+    async getNewSongs() {
+      let result = await requireNewSongs();
+      this.newSongs = result.data.result;
+      console.log(this.newSongs);
     },
   },
 };

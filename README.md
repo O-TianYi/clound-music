@@ -204,7 +204,13 @@ asideData: [
 <el-menu-item v-for="item in data" :key="item.id" :index="item.id"></el-menu-item>
 ```
 
+（5）事件触发顺序问题
 
+先触发了失去焦点的blur事件才触发对应的点击事件。
+
+目前问题先触发了失去焦点的blur事件才触发点击事件。
+
+（6）搜索框触发事件使用防抖来控制请求发送次数。防抖：即以最后一次发送为最新请求来发送。每一次最后一次请求都会覆盖之前没有发送返回的相同请求。
 
 
 
@@ -219,3 +225,68 @@ asideData: [
 ````
 <ul :class="data.length>5?'ul-more':'ul-less'"></ul>
 ````
+
+##### 文字间距
+
+```
+letter-spacing:2px
+```
+
+##### 输入框聚焦把提示内容清空
+
+```
+//vue
+<el-input
+    :placeholder="placeholder"
+    @blur="placeholder='搜索音乐，视频，歌词，电台'"
+    @focus="placeholder=''"
+></el-input>
+data() {
+    return {
+      placeholder: "搜索音乐，视频，歌词，电台"
+    };
+},
+
+//原生----没实践过
+<input type="text" placeholder="请输入内容" οnfοcus="this.placeholder=''" οnblur="this.placeholder='请输入内容'" \>
+```
+
+##### css画三角形
+
+```
+.triangle {
+    display: block;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-bottom: 10px solid black;
+}
+```
+
+
+
+
+
+
+
+### 目前存在的bug
+
++ 搜索框的blur和点击事件会互相冲突
+
+
+
+
+
+
+
+
+
+#### 样式优化
+
+##### 图片懒加载
+
+##### 占位
+
+##### 滚动预加载
+
+##### 请求返回时加载动画

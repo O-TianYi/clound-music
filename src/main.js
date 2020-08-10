@@ -13,6 +13,9 @@ Vue.config.productionTip = false;
 //导入axios
 // import axios from 'axios'
 
+//建立$bus传递数据
+Vue.prototype.$bus = new Vue();
+
 
 new Vue({
   store,
