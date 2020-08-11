@@ -10,10 +10,12 @@ const routes = [{
   {
     path: "/home",
     name: "home",
+    redirect: "/home/discovery",
     component: () => import("../views"),
     children: [{
         path: "discovery",
         name: "discovery",
+        redirect: "/home/discovery/recommendation",
         component: () => import("../views/discovery"),
         children: [{
             path: "recommendation",
@@ -73,6 +75,12 @@ const routes = [{
         component: () => import("../views/user"),
       },
     ]
+  },
+  // 设置
+  {
+    path: "/setting",
+    name: "setting",
+    component: () => import("../components/header/setting.vue"),
   },
 ];
 

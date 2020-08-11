@@ -26,7 +26,7 @@
             <li
               v-for="(item,index) in hotSearchLists"
               :key="index"
-              @click.prevent="getSearch(item.searchWord)"
+              @mousedown="getSearch(item.searchWord)"
             >
               <div :class="['left',index<=2?'red':'']">{{index+1}}</div>
               <div class="right">
@@ -65,7 +65,7 @@
       <i class="iconfont icon-youjian">
         <span class="info">3</span>
       </i>
-      <i class="iconfont icon-shezhi"></i>
+      <i class="iconfont icon-shezhi" @click="$router.push({name:'setting'})"></i>
     </div>
   </header>
 </template>
@@ -119,10 +119,12 @@ export default {
 
     //搜索框失焦点触发搜索方法
     inputBlur() {
+      this.isFocus = false;
       if (!this.input) {
         this.placeholder = "搜索音乐，视频，歌词，电台";
+        return;
       }
-      // if(this.input)
+      this.getSearch(this.input);
     },
     //搜索框聚焦
     inputFocus() {
@@ -145,6 +147,7 @@ export default {
   position: fixed;
   top: 0;
   z-index: 9999;
+  min-width: 1000px;
   .logo {
     @include flex-general(row, flex-start, center);
     color: $logo-font-color;

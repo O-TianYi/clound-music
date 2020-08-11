@@ -19,9 +19,6 @@ export default {
       activeName: "recommendation",
     };
   },
-  mounted() {
-    // this.$router.push({ name: this.activeName });
-  },
   methods: {
     handleClick(tab) {
       // tab.name就是点击的name

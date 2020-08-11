@@ -5,8 +5,12 @@
     <div class="content">
       <ul>
         <li v-for="item in playlists" :key="item.id">
-          <img :src="item.coverImgUrl" alt width="100%" height="100%" />
-          <p>{{item.name}}</p>
+          <el-image :src="item.coverImgUrl" lazy fit="fill">
+            <div slot="placeholder" class="image-slot">
+              <i class="el-icon-picture-outline"></i>
+            </div>
+          </el-image>
+          <span>{{item.name}}</span>
         </li>
       </ul>
     </div>
@@ -56,16 +60,32 @@ export default {
 
 <style lang="scss" scoped>
 .main {
+  .el-image {
+    /deep/ .image-slot {
+      @include flex-center;
+      width: 100%;
+      font-size: 50px;
+      background-color: #f5f7fa;
+    }
+  }
+
   .content {
     margin-top: 20px;
     ul {
       @include flex-between;
       flex-wrap: wrap;
       li {
-        @include flex-general(column, flex-start);
+        @include flex-general(column, flex-start, flex-start);
         width: 18%;
-        box-sizing: border-box;
-        padding-bottom: 30px;
+        margin-bottom: 20px;
+        span {
+          // @include text-ellipsis;
+          display: block;
+          height: 50px;
+          width: 100%;
+          margin-top: 10px;
+          font-size: 14px;
+        }
       }
     }
   }

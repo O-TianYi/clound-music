@@ -204,13 +204,183 @@ asideData: [
 <el-menu-item v-for="item in data" :key="item.id" :index="item.id"></el-menu-item>
 ```
 
-（5）事件触发顺序问题
+（5）事件触发顺序问题（未解决）
 
 先触发了失去焦点的blur事件才触发对应的点击事件。
 
 目前问题先触发了失去焦点的blur事件才触发点击事件。
 
-（6）搜索框触发事件使用防抖来控制请求发送次数。防抖：即以最后一次发送为最新请求来发送。每一次最后一次请求都会覆盖之前没有发送返回的相同请求。
+（6）搜索框触发事件使用防抖来控制请求发送次数。防抖：即以最后一次发送为最新请求来发送。每一次最后一次请求都会覆盖之前没有发送返回的相同请求。（未实现）
+
+（7）router-view嵌套问题。router-view嵌套和需要指定的router-view显示内容。
+
+```
+{
+    path: "/",
+    redirect: "/home",
+},
+// 设置
+{
+    path: "/setting",
+    name: "setting",
+    component: () => import("../components/header/setting.vue"),
+},
+{
+    path: "/home",
+    name: "home",
+    children:[...]
+},
+{
+    path: "live",
+    name: "live",
+    component: () => import("../views/live"),
+},
+```
+
+例如上面例子：setting和live都会在app.vue中的router-view的位置显示，而home中的children所有组件都会在home的router-view的位置显示。
+
+（8）路由传参
+
+```
+query结合path、name使用
+params结合name使用，不能和path使用，不然直接无视params中的内容
+
++ query传递参数的形式就是在地址栏拼接字符串的形式，可以理解为get参数传递
++ params则是不在地址栏显示参数，可以理解为post参数传递
+```
+
+（9）使用事件委任来解决每个li绑定点击事件（未实现）
+
+```
+selectMusic(event) {
+      let e = event || window.event;
+      let target = e.target || e.srcElement; //标准浏览器用ev.target，IE浏览器用event.srcElement
+      console.log(e, target);
+      if (target.nodeName.toLowerCase() == "li") {
+        alert(target.innerHTML);
+      }
+    },
+```
+
+（10）audio参考
+
+https://www.cnblogs.com/zhusheng2008/p/5529439.html
+
+https://blog.csdn.net/TCF_JingFeng/article/details/86666351
+
+```
+使用ref取代原来的id获取dom节点
+ <audio controls :src="songUrl" id="audio" @play="ready" autoplay />
+ <audio controls :src="songUrl" ref="audio" @play="ready" autoplay />
+ 
+ this.$refs.audio.src = url;
+ 
+//audio的重要属性
+audioTracks    返回可用的音轨列表（MultipleTrackList对象）    
+autoplay    媒体加载后自动播放    
+buffered    返回缓冲部件的时间范围(TimeRanges对象)    
+controller    返回当前的媒体控制器（MediaController对象）    
+controls    显示播控控件      
+currentSrc    返回当前媒体的URL    
+currentTime    当前播放的时间，单位秒    
+defaultMuted    缺省是否静音    
+defaultPlaybackRate    播控的缺省倍速    
+duration    返回媒体的播放总时长，单位秒    
+ended    返回当前播放是否结束标志    
+error    返回当前播放的错误状态    
+initialTime    返回初始播放的位置    
+loop    是否循环播放    
+mediaGroup    当前音视频所属媒体组 (用来链接多个音视频标签)    
+muted    是否静音    
+networkState    返回当前网络状态    
+paused    是否暂停    
+playbackRate    播放的倍速    
+played    当前播放部件已经播放的时间范围(TimeRanges对象)    
+preload    页面加载时是否同时加载音视频  
+volume    音量值 
+src    当前音视频源的URL 
+```
+
+vue的audio的方法（和原生的不一样）
+
+参考掘金的：https://juejin.im/post/6844903796942995470
+
+```
+//获取播放音乐的实时时间timeupdate
+ <audio controls :src="songUrl" ref="audio" autoplay="false" @timeupdate="updateTime" />
+ 
+ //返回的是秒数，需要自行转换，例如返回100s这样的
+ updateTime(e) {
+     //  this.currentTime = e.target.currentTime;  //获取audio当前播放时间
+     console.log(e.target.currentTime);
+ },
+ 
+ //时间格式转换为---m:s
+ updateTime(e) {
+     let time = Math.floor(e.target.currentTime); //获取实时时间取整
+     //处理时间
+     //分钟
+     let m = parseInt(time / 60); //从字符串获取第一个数字，例如1.5=》1
+     if (m < 10) {
+     m = "0" + m;
+     }
+     //秒
+     let s = Math.round(time % 60);//将数字四舍五入，例如1.5=>2
+     if (s < 10) {
+     s = "0" + s;
+     }
+     console.log(m + ":" + s);
+ },
+```
+
+**知识拓展：round、parseInt、parseFloat、floor之间的区别：**
+
+```
+round:四舍五入，当数字为负数，绝对值要>5才能入，整数>=5都可以入
+	=Math.round(5.51)　　//返回6
+    =Math.round(2.4) 　　//返回2
+    =Math.round(-1.4)　　//返回-1
+    =Math.round(-1.5)　　//返回-1
+    =Math.round(-1.51)　　//返回-2,这个是特殊情况
+    =Math.round(-5.8)　　//返回-6
+floor:向下取整，一般使用在获取非负数的整数部分时使用
+	=Math.floor(12.3); // 12
+    =Math.floor(6.9); // 6
+    =Math.floor(4); // 4
+    =Math.floor(-1.2); // -2
+    =Math.floor(-1.9); // -2
+    =Math.floor(‘1aa’)/('a1'); // NaN
+parseInt:直接去除小数部分，可以将字符型的数字转化为10进制，会将传递的字符串进行转换数字，例如
+	=parseInt('11', 8); // 9, 8进制中的11即为10进制中的9
+    =parseInt('123.456'); // 123
+    =parseInt('a123'); // NaN
+    =parseInt('123a456'); // 123
+parseFloat:字符串转换为数值，和parseInt类似，只是返回小数部分
+ceil:往大的方向取
+	=Math.ceil(5.57)　　//返回6
+    =Math.ceil(2.4)　　//返回3
+    =Math.ceil(-1.5)　　//返回-1
+    =Math.ceil(-5.8)　　//返回-5
+```
+
+**audio的坑**
+
+获取duration音乐的总时长需要在音乐能播放的钩子函数（canplay）才能获取，其他地方获取为NaN
+
+```
+<audio controls ref="audio" autoplay="false" @timeupdate="updateTime" @canplay="getDuration" />
+
+getDuration() {
+	console.log(this.$refs.audio.duration);
+},
+```
+
+（11）字符串转换为数字技巧
+
+```
+'5'-0：减个0就可以完成字符串转换为数字
+5+'':这样可以实现数字转换为字符串
+```
 
 
 
@@ -272,6 +442,16 @@ data() {
 ### 目前存在的bug
 
 + 搜索框的blur和点击事件会互相冲突
+
+  原因：blur和click的事件产生冲突
+
+  解决：使用mousedown来取代click，来来改变触发事件的优先级
+
+  ```
+  @mousedown="getSearch(item.searchWord)"
+  ```
+
+  
 
 
 

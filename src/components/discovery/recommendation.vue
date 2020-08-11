@@ -3,7 +3,7 @@
     <el-carousel type="card" height="200px">
       <el-carousel-item v-for="(item,index) in banners" :key="index">
         <el-image :src="item.imageUrl" lazy fit="fill">
-          <div slot="error" class="image-slot">
+          <div slot="placeholder" class="image-slot">
             <i class="el-icon-picture-outline"></i>
           </div>
         </el-image>
@@ -75,12 +75,26 @@ export default {
       this.newSongs = result.data.result;
       console.log(this.newSongs);
     },
+    //图片加载完成触发
+    getloading() {
+      console.log("触发了");
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .main {
+  .el-image {
+    /deep/ .image-slot {
+      @include flex-center;
+      height: 200px;
+      width: 400px;
+      font-size: 50px;
+      background-color: #f5f7fa;
+    }
+  }
+
   footer {
     margin-top: 30px;
     border-top: 1px solid $line-color;

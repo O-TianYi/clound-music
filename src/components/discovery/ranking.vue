@@ -4,7 +4,16 @@
       <p>官方榜</p>
       <ul>
         <li v-for="item in officialToplist" :key="item.id">
-          <img :src="item.coverImgUrl" alt width="100%" height="100px" />
+          <el-image
+            :src="item.coverImgUrl"
+            lazy
+            fit="fill"
+            style="width: 100%;height: 80px;padding: 0;"
+          >
+            <div slot="placeholder" class="image-slot">
+              <i class="el-icon-picture-outline"></i>
+            </div>
+          </el-image>
           <ul>
             <li>
               <span class="left">
@@ -22,8 +31,12 @@
       <p>全球榜</p>
       <ul>
         <li v-for="item in globalToplist" :key="item.id">
-          <img :src="item.coverImgUrl" alt width="100%" height="100%" />
-          <p>{{item.name}}</p>
+          <el-image :src="item.coverImgUrl" lazy fit="fill">
+            <div slot="placeholder" class="image-slot">
+              <i class="el-icon-picture-outline"></i>
+            </div>
+          </el-image>
+          <span>{{item.name}}</span>
         </li>
       </ul>
     </div>
@@ -67,6 +80,9 @@ export default {
       @include flex-general(row, flex-start);
       flex-wrap: wrap;
       li {
+        /deep/ .el-image__placeholder {
+          width: 100px;
+        }
         @include flex-general(column, space-between);
         margin-left: 2%;
         margin-bottom: 20px;
@@ -122,8 +138,13 @@ export default {
         &:nth-child(6n + 1) {
           margin-left: 0;
         }
-        p {
-          border: 0;
+        span {
+          display: block;
+          height: 30px;
+          width: 100%;
+          margin-top: 10px;
+          padding-bottom: 10px;
+          font-size: 14px;
         }
       }
     }

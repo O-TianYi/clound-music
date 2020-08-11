@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <Search />
+    <!-- <Search /> -->
     <div class="content">
       <div class="aside">
         <Aside :data="asideData" title="推荐" class="aside-item" />
@@ -9,17 +9,16 @@
       <div class="router-view">
         <router-view />
       </div>
+      <Footer />
     </div>
-    <Footer />
   </div>
 </template>
 
 <script>
-import Aside from "./aside";
-import Search from "./search";
-import Footer from "./footer";
+import Aside from "./header/aside";
+import Footer from "./header/footer";
 export default {
-  components: { Aside, Search, Footer },
+  components: { Aside, Footer },
   data() {
     return {
       title1: "推荐",
@@ -70,6 +69,7 @@ export default {
       padding-top: 60px;
       padding-left: 220px;
       padding-right: 20px;
+      padding-bottom: 100px;
       flex: 1;
     }
   }

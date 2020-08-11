@@ -25,6 +25,7 @@ export default {
 .main {
   @include flex-between;
   color: #666666;
+  font-size: 14px;
   span {
     .babel {
       background-color: #8f9096;

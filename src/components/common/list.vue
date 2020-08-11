@@ -4,7 +4,7 @@
     <ul :class="data.length>5?'ul-more':'ul-less'">
       <li v-for="(item,index) in data" :key="index">
         <el-image :src="item.picUrl" lazy fit="fill">
-          <div slot="error" class="image-slot">
+          <div slot="placeholder" class="image-slot">
             <i class="el-icon-picture-outline"></i>
           </div>
         </el-image>
@@ -26,6 +26,15 @@ export default {
     padding-bottom: 10px;
     border-bottom: 1px solid $line-color;
     margin-bottom: 10px;
+  }
+  .el-image {
+    /deep/ .image-slot {
+      @include flex-center;
+      height: 200px;
+      width: 200px;
+      font-size: 50px;
+      background-color: gary;
+    }
   }
   .ul-less {
     @include flex-between;

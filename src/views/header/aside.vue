@@ -27,9 +27,6 @@ export default {
     return {};
   },
   props: ["title", "data"],
-  mounted() {
-    // this.$router.push({ name: "discovery" });
-  },
   methods: {
     // 路由跳转
     goRouter(route) {

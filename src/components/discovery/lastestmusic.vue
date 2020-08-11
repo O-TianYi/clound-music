@@ -21,11 +21,20 @@
           </div>
         </div>
         <ul class="lists">
-          <li v-for="(item,index) in lastestSongs" :key="index">
+          <li v-for="(item,index) in lastestSongs" :key="index" @click="selectMusic(item.id)">
             <div class="rank">{{index+1>9?index+1:'0'+(index+1)}}</div>
             <div class="sing-info">
-              <img :src="item.album.picUrl" alt height="60px" width="60px" />
-              {{item.name}}{{item.alias.length!==0?`（${item.alias[0]}）`:''}}
+              <el-image
+                :src="item.album.picUrl"
+                lazy
+                fit="fill"
+                style="width: 60px; height: 60px;margin-right: 10px;padding: 0;"
+              >
+                <div slot="placeholder" class="image-slot">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </el-image>
+              <span>{{item.name}}{{item.alias.length!==0?`（${item.alias[0]}）`:''}}</span>
             </div>
             <div class="singer-name">{{changAuthor(item.artists)}}</div>
             <div class="form">{{item.name}}{{item.alias.length!==0?`（${item.alias[0]}）`:''}}</div>
@@ -69,6 +78,12 @@ export default {
     //获取作者
     changAuthor(artists) {
       return changAuthor(artists);
+    },
+    //点击音乐进行播放
+    selectMusic(id) {
+      console.log(id);
+      //发送给footer实现播放功能
+      this.$bus.$emit("getUrl", id);
     },
   },
 };
@@ -128,8 +143,19 @@ export default {
             @include flex-general(row, flex-start, center);
             @include text-ellipsis;
             flex: 1;
-            img {
-              margin-right: 10px;
+            /deep/ .el-image {
+              width: 60px;
+              height: 60px;
+            }
+            /deep/ .image-slot {
+              @include flex-center;
+              width: 100%;
+              height: 60px;
+              font-size: 30px;
+            }
+            span {
+              @include text-ellipsis;
+              flex: 1;
             }
           }
           .singer-name {

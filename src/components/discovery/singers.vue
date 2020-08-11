@@ -9,8 +9,12 @@
     <main>
       <ul>
         <li v-for="item in artists" :key="item.id">
-          <img :src="item.picUrl" alt width="100%" height="100%" />
-          <p>{{item.name}}</p>
+          <el-image :src="item.picUrl" lazy fit="fill">
+            <div slot="placeholder" class="image-slot">
+              <i class="el-icon-picture-outline"></i>
+            </div>
+          </el-image>
+          <span>{{item.name}}</span>
         </li>
       </ul>
     </main>
@@ -78,6 +82,19 @@ export default {
         width: 18%;
         box-sizing: border-box;
         padding-bottom: 20px;
+        span {
+          display: block;
+          height: 30px;
+          width: 100%;
+          margin-top: 10px;
+          padding-bottom: 10px;
+          font-size: 14px;
+        }
+        /deep/ .image-slot {
+          @include flex-center;
+          width: 100%;
+          font-size: 40px;
+        }
       }
     }
   }
