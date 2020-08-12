@@ -46,12 +46,6 @@ import { requireUrlById } from "../../api";
 export default {
   created() {},
   mounted() {
-    this.$bus.$on("getUrl", (id) => {
-      console.log("传递的id", id);
-      //获取播放音乐的id
-      this.getUrl(id);
-    });
-
     if (localStorage.getItem("lastestUrl")) {
       this.stop = true;
       this.$refs.audio.currentTime = localStorage.getItem("lastestTime");
@@ -59,6 +53,12 @@ export default {
       console.log(localStorage.getItem("lastestTime"), this.music);
       this.$refs.audio.src = localStorage.getItem("lastestUrl");
     }
+
+    this.$bus.$on("getUrl", (id) => {
+      console.log("传递的id", id);
+      //获取播放音乐的id
+      this.getUrl(id);
+    });
   },
   beforeDestroy() {
     localStorage.setItem("musicTime", this.music);

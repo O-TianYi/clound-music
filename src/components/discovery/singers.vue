@@ -1,9 +1,9 @@
 <template>
   <div class="main">
     <header>
-      <Nav name="语种" :data="area" babel="true" class="nav" />
-      <Nav name="分类" :data="types" babel="true" class="nav" />
-      <Nav name="筛选" babel="true" class="nav" />
+      <Nav name="语种" :data="area" babel="true" class="nav" @clickCatName="getSongerArea" />
+      <Nav name="分类" :data="types" babel="true" class="nav" @clickCatName="getSongerType" />
+      <!-- <Nav name="筛选" babel="true" class="nav" /> -->
     </header>
 
     <main>
@@ -29,37 +29,53 @@ export default {
     Nav,
   },
   mounted() {
-    this.getSongers();
+    this.getSongers(this.params);
   },
   data() {
     return {
       //歌手分类
       types: [
-        { id: 1, name: "男歌手" },
-        { id: 2, name: "女歌手" },
-        { id: 3, name: "乐队" },
+        { id: 1, name: "全部", value: 0 },
+        { id: 2, name: "男歌手", value: 1 },
+        { id: 3, name: "女歌手", value: 2 },
+        { id: 4, name: "乐队", value: 3 },
       ],
       //歌手语言
       area: [
-        { id: 1, name: "华语" },
-        { id: 2, name: "欧美" },
-        { id: 3, name: "日本" },
+        { id: 1, name: "全部", value: -1 },
+        { id: 2, name: "华语", value: 7 },
+        { id: 3, name: "欧美", value: 96 },
+        { id: 4, name: "日本", value: 8 },
+        { id: 5, name: "韩国", value: 16 },
+        { id: 6, name: "其他", value: 0 },
       ],
       //歌手名字开头
       name: [],
       //筛选的歌手
       artists: [],
+      //筛选歌手的条件对象--给请求作为参数
+      params: {
+        area: -1, //-1是全部
+        type: 0, //1男歌手,0全部
+        limit: 30,
+      },
     };
   },
   methods: {
     //筛选歌手
-    async getSongers() {
-      let result = await requireSongers({
-        area: -1,
-        type: 1,
-        limit: 30,
-      });
+    async getSongers(params) {
+      let result = await requireSongers(params);
       this.artists = result.data.artists;
+    },
+    //获取选择的歌手地区
+    getSongerArea(area) {
+      this.params.area = area.value;
+      this.getSongers(this.params);
+    },
+    //获取歌手的类型
+    getSongerType(type) {
+      this.params.type = type.value;
+      this.getSongers(this.params);
     },
   },
 };
@@ -75,11 +91,14 @@ export default {
   }
   main {
     ul {
-      @include flex-between;
+      @include flex-general(row, flex-start);
       flex-wrap: wrap;
       li {
         @include flex-general(column, flex-start, flex-start);
-        width: 18%;
+        @include flex-wrap-li(18%, 2%);
+        &:nth-child(5n + 1) {
+          margin-left: 0;
+        }
         box-sizing: border-box;
         padding-bottom: 20px;
         span {

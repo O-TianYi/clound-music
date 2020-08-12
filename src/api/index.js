@@ -47,7 +47,7 @@ export const requireSongers = (params) => axios.get("api/artist/list", {
 //发现音乐----排行榜
 //排行榜的图标
 export const requireToplist = () => axios.get("api/toplist");
-//根据上面返回的id查询音乐列表
+//根据上面返回的id查询音乐列表----发现音乐也有用（常用）
 export const requirePlayListsById = (params) => axios.get("api/playlist/detail", {
     params
 });

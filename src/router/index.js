@@ -47,6 +47,12 @@ const routes = [{
             name: "ranking",
             component: () => import("../components/discovery/ranking.vue"),
           },
+          //歌单页面
+          {
+            path: "playlists",
+            name: "playlists",
+            component: () => import("../components/common/playList.vue"),
+          }
         ]
       },
       {

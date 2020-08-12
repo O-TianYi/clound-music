@@ -2,12 +2,13 @@
   <div class="main">
     <header class="title">{{title}}</header>
     <ul :class="data.length>5?'ul-more':'ul-less'">
-      <li v-for="(item,index) in data" :key="index">
+      <li v-for="(item,index) in data" :key="index" @click="goPlayList(item)">
         <el-image :src="item.picUrl" lazy fit="fill">
           <div slot="placeholder" class="image-slot">
             <i class="el-icon-picture-outline"></i>
           </div>
         </el-image>
+        <span>{{item.name}}</span>
       </li>
     </ul>
   </div>
@@ -16,6 +17,12 @@
 <script>
 export default {
   props: ["title", "data"],
+  methods: {
+    //前往每个li的歌曲列表界面
+    goPlayList(item) {
+      this.$router.push({ name: "playlists", params: { id: item.id } }); //params+name,,query都可
+    },
+  },
 };
 </script>
 

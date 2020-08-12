@@ -59,7 +59,7 @@ export default {
 
     //子组件点击触发父组件方法---给父组件传递cat名称
     getCatName(catName) {
-      this.getTagPlayList(catName);
+      this.getTagPlayList(catName.name);
     },
   },
 };
@@ -79,12 +79,15 @@ export default {
   .content {
     margin-top: 20px;
     ul {
-      @include flex-between;
+      @include flex-general(row, flex-start);
       flex-wrap: wrap;
       li {
         @include flex-general(column, flex-start, flex-start);
-        width: 18%;
+        @include flex-wrap-li(18%, 2%);
         margin-bottom: 20px;
+        &:nth-child(5n + 1) {
+          margin-left: 0;
+        }
         span {
           // @include text-ellipsis;
           display: block;

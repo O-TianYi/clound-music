@@ -1,11 +1,8 @@
 <template>
   <div class="main">
-    <span>
-      {{name}}：
-      <span class="babel" v-if="babel">全部</span>
-    </span>
+    <span>{{name}}：</span>
     <ul>
-      <li v-for="(item,index) in data" :key="index" @click="getCatName(item.name)">
+      <li v-for="(item,index) in data" :key="index" @click="getCatName(item)">
         <span>{{item.name}}</span>
       </li>
     </ul>
@@ -20,8 +17,12 @@ export default {
   },
   methods: {
     //给父组件传递点击的catName
-    getCatName(catName) {
-      this.$emit("clickCatName", catName);
+    getCatName(item) {
+      this.$emit("clickCatName", item);
+      window.event.currentTarget.parentNode.children.forEach((li) => {
+        li.className = "";
+      });
+      window.event.currentTarget.className = "active";
     },
   },
 };
@@ -49,17 +50,22 @@ export default {
       padding: 0 20px;
       text-align: center;
       border-right: 1px solid #cccccc;
+      color: #666666;
       &:last-child {
         border: 0;
       }
       span {
-        color: #666666;
         &:hover {
           cursor: pointer;
           color: black;
         }
       }
     }
+  }
+  .active {
+    background-color: #8f9096;
+    color: white;
+    border-radius: 5px;
   }
 }
 </style>

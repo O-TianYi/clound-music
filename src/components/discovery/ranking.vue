@@ -108,17 +108,11 @@ export default {
       @include flex-general(row, flex-start, flex-start);
       flex-wrap: wrap;
       li {
-        margin-left: 15px;
+        @include flex-wrap-li(32%, 2%);
+        @include flex-general(column, space-between);
         margin-bottom: 20px;
         /deep/ .el-image__placeholder {
           width: 100px;
-        }
-        @include flex-general(column, space-between);
-        width: 32%;
-        &:nth-child(1),
-        &:nth-child(2),
-        &:nth-child(3) {
-          flex: 1;
         }
         &:nth-child(3n + 1) {
           margin-left: 0;
@@ -186,8 +180,7 @@ export default {
       flex-wrap: wrap;
       li {
         font-size: 13px;
-        width: 15%;
-        margin-left: 2%;
+        @include flex-wrap-li(15%, 2%);
         padding-bottom: 20px;
         &:nth-child(6n + 1) {
           margin-left: 0;

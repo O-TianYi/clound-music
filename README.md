@@ -397,6 +397,31 @@ updateTime(e) {
 },
 ```
 
+（13）js动态设置active属性来控制选中样式
+
+```
+//让当前点击节点的所有兄弟元素包含自己都去掉active样式
+window.event.currentTarget.parentNode.children.forEach((li) => {
+	li.className = "";
+});
+//给点击的内容添加active
+window.event.currentTarget.className = "active";
+
+currentTarget和traget的区别
+currentTarget：是绑定了事件才会有该元素显示，例如li绑定了该事件，而点击其子元素currentTarget还是绑定了该事件的节点
+target：就是真实的子节点，例如li绑定了上面的事件，在该事件使用e.traget可以精确获取到该li元素下的子元素
+```
+
+（14）css样式问题，除了第一个都选择的写法
+
+```
+/deep/ .el-table__row {
+    &:not(:nth-child(1)):hover {
+    	color: red;
+    }
+}
+```
+
 
 
 
@@ -476,6 +501,8 @@ data() {
 
 
 
+
+
 #### 样式优化
 
 ##### 图片懒加载
@@ -485,3 +512,16 @@ data() {
 ##### 滚动预加载
 
 ##### 请求返回时加载动画
+
+
+
+
+
+问题：
+
+如何让第一行的liflex，而让不满一行的左边开始排列。
+
+```
+宽和边距使用百分比来解决，这样原来是怎么样布局，缩放也是怎么样的，不会突出很多。
+```
+
