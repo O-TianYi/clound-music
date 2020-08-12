@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <Nav :data="tags" name="热门标签" />
+    <Nav :data="tags" @clickCatName="getCatName" name="热门标签" />
 
     <div class="content">
       <ul>
@@ -34,25 +34,32 @@ export default {
   },
   mounted() {
     this.getAllTags();
-    this.getTagPlayList();
+    this.getTagPlayList("全部");
   },
   methods: {
     //获取所有标签名称
     async getAllTags() {
       let result = await requireAllTags();
       result.data.tags.forEach((val) => {
-        let obj = { id: val.id, name: val.name };
-        this.tags.push(obj);
+        if (val.playlistTag) {
+          let obj = { id: val.id, name: val.name };
+          this.tags.push(obj);
+        }
       });
     },
     //获取不同标签的歌单
-    async getTagPlayList() {
+    async getTagPlayList(catName) {
       let result = await requireTagPlayList({
-        cat: "全部",
+        cat: catName,
         limit: 30,
-        time: new Date(),
+        // time: new Date(),
       });
       this.playlists = result.data.playlists;
+    },
+
+    //子组件点击触发父组件方法---给父组件传递cat名称
+    getCatName(catName) {
+      this.getTagPlayList(catName);
     },
   },
 };

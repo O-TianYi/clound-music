@@ -2,8 +2,8 @@
   <div class="main">
     <div class="official">
       <p>官方榜</p>
-      <ul>
-        <li v-for="item in officialToplist" :key="item.id">
+      <ul class="rank-list">
+        <li v-for="(item,inde) in officialToplist" :key="item.id">
           <el-image
             :src="item.coverImgUrl"
             lazy
@@ -14,13 +14,23 @@
               <i class="el-icon-picture-outline"></i>
             </div>
           </el-image>
-          <ul>
-            <li>
-              <span class="left">
-                <span class="top">1</span>
-                <span class="pre">100%</span>很久很久
+          <ul class="list">
+            <li
+              v-for="(item,index) in officialLists[inde]"
+              :key="index"
+              @click="sendFooterId(item.id)"
+            >
+              <span class="top" :class="index>2?'':'red'">{{index+1}}</span>
+              <span class="pre">
+                100%
+                <!-- <img :src="item.al.picUrl" alt width="30px" height="30px" /> -->
               </span>
-              <span class="right">cheng橙子zzzzz</span>
+
+              <span class="desc">
+                <span class="name">{{item.name}}</span>
+                <span class="form">{{item.alia.length>0?'('+item.alia+')':''}}</span>
+              </span>
+              <span class="right">{{item.ar[0].name}}</span>
             </li>
           </ul>
           <div>查看全部></div>
@@ -44,12 +54,13 @@
 </template>
 
 <script>
-import { requireToplist } from "../../api/index";
+import { requireToplist, requirePlayListsById } from "../../api/index";
 export default {
   components: {},
   data() {
     return {
       officialToplist: [], //官方排行榜数据
+      officialLists: [], //所有官方排行的列表
       globalToplist: [], //全球排行榜数据
     };
   },
@@ -59,10 +70,27 @@ export default {
   methods: {
     //获取排行榜的数据
     async requireToplist() {
-      let result = await requireToplist();
+      let result = await requireToplist(); //------获取所有排行榜的数组，只是图片和id
       this.officialToplist = result.data.list.slice(0, 4);
       this.globalToplist = result.data.list.slice(4);
-      console.log(this.officialToplist, this.globalToplist);
+      for (let i = 0; i < this.officialToplist.length; i++) {
+        // let result = await requirePlayListsById({
+        //   id: this.officialToplist[i].id,
+        // });
+        let result = await this.getPlayListsById(this.officialToplist[i].id);
+        this.officialLists.push(result.data.playlist.tracks.slice(0, 8));
+      }
+      console.log(this.officialLists);
+    },
+    //根据排行的id查询音乐列表----根据获取的排行榜id查询获取相关的列表
+    async getPlayListsById(id) {
+      let result = await requirePlayListsById({ id: id });
+      return result;
+    },
+
+    //把id发送给footer进行音乐播放
+    sendFooterId(id) {
+      this.$bus.$emit("getUrl", id);
     },
   },
 };
@@ -77,37 +105,63 @@ export default {
       margin-bottom: 10px;
     }
     ul {
-      @include flex-general(row, flex-start);
+      @include flex-general(row, flex-start, flex-start);
       flex-wrap: wrap;
       li {
+        margin-left: 15px;
+        margin-bottom: 20px;
         /deep/ .el-image__placeholder {
           width: 100px;
         }
         @include flex-general(column, space-between);
-        margin-left: 2%;
-        margin-bottom: 20px;
         width: 32%;
+        &:nth-child(1),
+        &:nth-child(2),
+        &:nth-child(3) {
+          flex: 1;
+        }
         &:nth-child(3n + 1) {
           margin-left: 0;
         }
-        ul {
-          @include flex-general(column, space-between, flex-start);
+        .list {
+          @include flex-general(column, flex-start);
           width: 100%;
+          padding: 10px;
           li {
             width: 100%;
-            @include flex-general(row, space-between, flex-end);
-            .left {
-              flex: 1;
-              .top {
-                font-size: 18px;
-              }
-              .pre {
+            margin: 0;
+            font-size: 14px;
+            @include flex-general(row, space-between, center);
+            &:nth-child(odd) {
+              background-color: #f5f5f7;
+            }
+            &:hover {
+              background-color: #ebeced;
+            }
+            .top {
+              width: 30px;
+              font-size: 18px;
+            }
+            .red {
+              color: red;
+            }
+            .pre {
+              width: 50px;
+              color: gray;
+            }
+            .desc {
+              @include text-ellipsis;
+              // flex: 1;
+              width: 250px;
+              line-height: 25px;
+              .form {
                 color: gray;
               }
             }
             .right {
               @include text-ellipsis;
-              width: 100px;
+              width: 70px;
+              text-align: right;
             }
           }
         }

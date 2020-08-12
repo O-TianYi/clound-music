@@ -5,7 +5,7 @@
       <span class="babel" v-if="babel">全部</span>
     </span>
     <ul>
-      <li v-for="(item,index) in data" :key="index">
+      <li v-for="(item,index) in data" :key="index" @click="getCatName(item.name)">
         <span>{{item.name}}</span>
       </li>
     </ul>
@@ -17,6 +17,12 @@ export default {
   props: ["name", "data", "babel"],
   data() {
     return {};
+  },
+  methods: {
+    //给父组件传递点击的catName
+    getCatName(catName) {
+      this.$emit("clickCatName", catName);
+    },
   },
 };
 </script>

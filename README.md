@@ -382,6 +382,21 @@ getDuration() {
 5+'':这样可以实现数字转换为字符串
 ```
 
+（12）因为音乐播放进度条的需要把audio的属性duration（歌曲总时间）和currentTime（当前时间）做除法获取对应的进度条的数值，但是要预防duration的值为NaN的判断，否则el-progress组件（element-ui进度条组件）就会报custom validator check failed for prop "percentage"。
+
+```
+ <audio :src="songUrl" ref="audio" autoplay="false" @timeupdate="updateTime" />
+ 
+
+updateTime(e) {
+    if (!isNaN(e.target.duration)) {
+    this.music = Math.floor(
+    (e.target.currentTime / e.target.duration) * 100 - 0
+    );
+    }
+},
+```
+
 
 
 
@@ -453,7 +468,7 @@ data() {
 
   
 
-
+##### 最新列表中日本和华语返回的playtime有问题，返回为空报 Error in render: "TypeError: Cannot read property 'playTime' of null"
 
 
 

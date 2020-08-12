@@ -1,12 +1,12 @@
 <template>
   <div class="main">
     <header>
-      <el-tabs v-model="activeName" @tab-click="handleClick" class="left">
-        <el-tab-pane label="全部" name="1"></el-tab-pane>
-        <el-tab-pane label="华语" name="2"></el-tab-pane>
-        <el-tab-pane label="欧美" name="3"></el-tab-pane>
-        <el-tab-pane label="韩国" name="4"></el-tab-pane>
-        <el-tab-pane label="日本" name="5"></el-tab-pane>
+      <el-tabs v-model="tagName" @tab-click="getPlayListsByTag" class="left">
+        <el-tab-pane label="全部" name="0"></el-tab-pane>
+        <el-tab-pane label="华语" name="7"></el-tab-pane>
+        <el-tab-pane label="欧美" name="96"></el-tab-pane>
+        <el-tab-pane label="韩国" name="16"></el-tab-pane>
+        <el-tab-pane label="日本" name="8"></el-tab-pane>
       </el-tabs>
     </header>
 
@@ -38,7 +38,7 @@
             </div>
             <div class="singer-name">{{changAuthor(item.artists)}}</div>
             <div class="form">{{item.name}}{{item.alias.length!==0?`（${item.alias[0]}）`:''}}</div>
-            <div class="time">{{changDate(item.mMusic.playTime)}}</div>
+            <!-- <div class="time">{{changDate(item.bMusic.playTime)}}</div> -->
           </li>
         </ul>
       </el-card>
@@ -51,28 +51,32 @@ import { requireLastestSongs } from "../../api/index";
 import { changAuthor, changDate } from "../../plugins/common"; //引入多作者拼接转换方法
 export default {
   mounted() {
-    this.getLastestSongs();
+    this.getLastestSongs(0);
   },
   data() {
     return {
-      activeName: "1",
+      tagName: 0,
       lastestSongs: [], //最新歌曲100首
     };
   },
   methods: {
     //根据类型获取最新的数据
-    async getLastestSongs() {
-      let result = await requireLastestSongs();
+    async getLastestSongs(tagName) {
+      let result = await requireLastestSongs({
+        type: tagName,
+      });
       this.lastestSongs = result.data.data;
+      console.log(this.lastestSongs);
     },
 
-    //获取不同的路由跳转
-    handleClick(tab) {
-      if (this.activeName == tab.name) return;
-      console.log(tab.name);
+    //根据不同的标签获取不同的音乐列表
+    getPlayListsByTag(tab) {
+      // console.log(tab.name, this.tagName);
+      this.getLastestSongs(tab.name);
     },
     //时间戳转换为时间
     changDate(date) {
+      if (date === null) return "00:00";
       return changDate(date);
     },
     //获取作者

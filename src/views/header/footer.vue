@@ -6,7 +6,7 @@
       </span>
 
       <span @click="stopMusic">
-        <i class="iconfont icon-zanting2" v-if="stop"></i>
+        <i class="iconfont icon-zanting2" v-if="!stop"></i>
         <i class="iconfont icon-zanting3" v-else></i>
       </span>
       <span>
@@ -14,7 +14,7 @@
       </span>
     </div>
     <div class="right">
-      <audio ref="audio" src autoplay="false" @timeupdate="updateTime" @canplay="getDuration" />
+      <audio ref="audio" src @timeupdate="updateTime" @canplay="getDuration" />
       <div class="audio-style">
         <span class="current-time">{{currentTime}}</span>
         <span class="music">
@@ -44,21 +44,34 @@
 <script>
 import { requireUrlById } from "../../api";
 export default {
-  created() {
+  created() {},
+  mounted() {
     this.$bus.$on("getUrl", (id) => {
       console.log("传递的id", id);
       //获取播放音乐的id
       this.getUrl(id);
     });
+
+    if (localStorage.getItem("lastestUrl")) {
+      this.stop = true;
+      this.$refs.audio.currentTime = localStorage.getItem("lastestTime");
+      this.music = localStorage.getItem("musicTime") - 0;
+      console.log(localStorage.getItem("lastestTime"), this.music);
+      this.$refs.audio.src = localStorage.getItem("lastestUrl");
+    }
+  },
+  beforeDestroy() {
+    localStorage.setItem("musicTime", this.music);
+    localStorage.setItem("lastestTime", this.$refs.audio.currentTime);
   },
   data() {
     return {
-      stop: false, //是否暂停
+      stop: true, //是否暂停
       songUrl: "", //需要播放的音乐mp3地址
       music: 0,
       currentTime: "00:00", //播放的时间
       duration: "00:00", //总时长
-      volume: 10, //音量
+      volume: 50, //音量
       tempVolume: 0, //暂存的音量
       loop: false, //是否循环
       muted: false, //是否静音
@@ -68,6 +81,8 @@ export default {
   methods: {
     //获取所有初始状态
     init() {
+      this.stop = true;
+      this.music = 0;
       this.volume = this.$refs.audio.volume;
       this.loop = this.$refs.audio.loop;
       this.muted = this.$refs.audio.muted;
@@ -94,7 +109,7 @@ export default {
       let result = await requireUrlById({
         id: id,
       });
-      if (result.data.data[0].url) {
+      if (result.data.data[0].url && this.$refs.audio) {
         this.$refs.audio.src = result.data.data[0].url;
       }
       this.init();
@@ -106,13 +121,18 @@ export default {
         this.music = Math.floor(
           (e.target.currentTime / e.target.duration) * 100 - 0
         );
+        if (this.music == 100) {
+          this.stop = true;
+        }
       }
     },
-    //获取总时长
+    //获取总时长---url资源加载完成
     getDuration() {
       this.duration = this.getTime(this.$refs.audio.duration);
-      this.stop = true;
+      // this.stop = false;
       this.muted = false;
+      //存储为本地下次直接加载
+      localStorage.setItem("lastestUrl", this.$refs.audio.currentSrc);
     },
     //停止和播放音乐
     stopMusic() {
@@ -122,7 +142,7 @@ export default {
         return;
       }
       this.stop = !this.stop;
-      if (this.stop && this.$refs.audio.paused) {
+      if (!this.stop && this.$refs.audio.paused) {
         this.$refs.audio.play();
       } else {
         this.$refs.audio.pause();
