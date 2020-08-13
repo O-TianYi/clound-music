@@ -8,7 +8,7 @@
 
     <main>
       <ul>
-        <li v-for="item in artists" :key="item.id">
+        <li v-for="item in artists" :key="item.id" @click="goSingerPlayList(item)">
           <el-image :src="item.picUrl" lazy fit="fill">
             <div slot="placeholder" class="image-slot">
               <i class="el-icon-picture-outline"></i>
@@ -76,6 +76,11 @@ export default {
     getSongerType(type) {
       this.params.type = type.value;
       this.getSongers(this.params);
+    },
+
+    //根据歌手跳转到歌单
+    goSingerPlayList(item) {
+      this.$router.push({ name: "singerplaylists", params: { id: item.id } });
     },
   },
 };

@@ -422,6 +422,23 @@ target：就是真实的子节点，例如li绑定了上面的事件，在该事
 }
 ```
 
+（15）取消双击选中文字操作
+
+```
+css解决办法：
+div{
+    -moz-user-select:none;/*火狐*/
+    -webkit-user-select:none;/*webkit浏览器*/
+    -ms-user-select:none;/*IE10*/
+    -khtml-user-select:none;/*早期浏览器*/
+      user-select:none;
+}
+
+
+js解决办法---就算是vue中也只需要使用该方法，没有@selectstart操作
+<li onselectstart="return false;">
+```
+
 
 
 

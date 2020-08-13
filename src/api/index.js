@@ -42,6 +42,15 @@ export const requireTagPlayList = (params) => axios.get("api/top/playlist/highqu
 export const requireSongers = (params) => axios.get("api/artist/list", {
     params
 });
+//获取某个歌手的专辑
+export const requireSingerPlayLists = (params) => axios.get("api/artist/album", {
+    params
+});
+//根据专辑id获取专辑内容
+export const requireSingerSongs = (params) => axios.get("api/album", {
+    params
+});
+
 
 
 //发现音乐----排行榜

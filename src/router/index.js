@@ -47,12 +47,18 @@ const routes = [{
             name: "ranking",
             component: () => import("../components/discovery/ranking.vue"),
           },
-          //歌单页面
+          //子页面详细歌单
           {
             path: "playlists",
             name: "playlists",
             component: () => import("../components/common/playList.vue"),
-          }
+          },
+          //歌手子页面
+          {
+            path: "singerplaylists",
+            name: "singerplaylists",
+            component: () => import("../components/discovery/singers-playlist.vue"),
+          },
         ]
       },
       {

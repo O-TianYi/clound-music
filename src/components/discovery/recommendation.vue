@@ -75,10 +75,6 @@ export default {
       this.newSongs = result.data.result;
       console.log(this.newSongs);
     },
-    //图片加载完成触发
-    getloading() {
-      console.log("触发了");
-    },
   },
 };
 </script>

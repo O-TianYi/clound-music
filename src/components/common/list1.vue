@@ -5,7 +5,7 @@
       <li v-for="(item,index) in data" :key="item.id">
         <div class="left">{{index+1>9?index+1:'0'+(index+1)}}</div>
         <div class="right">
-          <img :src="item.picUrl" width="100%" height="100%" />
+          <img :src="item.picUrl" width="100%" height="100%" @click="sendFooter(item)" />
           <div class="info">
             <p>{{item.name}}</p>
             <p>{{changAuthor(item.song.artists)}}</p>
@@ -24,6 +24,10 @@ export default {
     //更改名称
     changAuthor(artists) {
       return changAuthor(artists);
+    },
+    //播放音乐
+    sendFooter(item) {
+      this.$bus.$emit("getUrl", item.id);
     },
   },
 };

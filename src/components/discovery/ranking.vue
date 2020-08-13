@@ -19,6 +19,7 @@
               v-for="(item,index) in officialLists[inde]"
               :key="index"
               @click="sendFooterId(item.id)"
+              onselectstart="return false;"
             >
               <span class="top" :class="index>2?'':'red'">{{index+1}}</span>
               <span class="pre">
@@ -40,7 +41,7 @@
     <div class="global">
       <p>全球榜</p>
       <ul>
-        <li v-for="item in globalToplist" :key="item.id">
+        <li v-for="item in globalToplist" :key="item.id" @click="goPlayList(item)">
           <el-image :src="item.coverImgUrl" lazy fit="fill">
             <div slot="placeholder" class="image-slot">
               <i class="el-icon-picture-outline"></i>
@@ -91,6 +92,10 @@ export default {
     //把id发送给footer进行音乐播放
     sendFooterId(id) {
       this.$bus.$emit("getUrl", id);
+    },
+    //跳转到歌单详情页面
+    goPlayList(item) {
+      this.$router.push({ name: "playlists", params: { id: item.id } });
     },
   },
 };

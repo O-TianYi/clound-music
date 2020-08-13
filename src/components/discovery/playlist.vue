@@ -4,7 +4,7 @@
 
     <div class="content">
       <ul>
-        <li v-for="item in playlists" :key="item.id">
+        <li v-for="item in playlists" :key="item.id" @click="goPlayList(item)">
           <el-image :src="item.coverImgUrl" lazy fit="fill">
             <div slot="placeholder" class="image-slot">
               <i class="el-icon-picture-outline"></i>
@@ -60,6 +60,10 @@ export default {
     //子组件点击触发父组件方法---给父组件传递cat名称
     getCatName(catName) {
       this.getTagPlayList(catName.name);
+    },
+    //跳转到歌单详情页面
+    goPlayList(item) {
+      this.$router.push({ name: "playlists", params: { id: item.id } });
     },
   },
 };
