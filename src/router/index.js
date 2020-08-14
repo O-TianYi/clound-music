@@ -67,9 +67,9 @@ const routes = [{
         component: () => import("../views/live"),
       },
       {
-        path: "mv",
-        name: "mv",
-        component: () => import("../views/mv"),
+        path: "mvlist",
+        name: "mvlist",
+        component: () => import("../views/mvlist"),
       },
       {
         path: "mymusic",
@@ -94,6 +94,14 @@ const routes = [{
     name: "setting",
     component: () => import("../components/header/setting.vue"),
   },
+  // mv
+  {
+    path: "/mv",
+    name: "mv",
+    component: () => import("../components/common/mv.vue"),
+  },
+
+
 ];
 
 const router = new VueRouter({

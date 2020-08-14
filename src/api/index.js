@@ -50,6 +50,18 @@ export const requireSingerPlayLists = (params) => axios.get("api/artist/album", 
 export const requireSingerSongs = (params) => axios.get("api/album", {
     params
 });
+//获取歌手所有mv----参数为歌手的id
+export const requireSingerMV = (params) => axios.get("api/artist/mv", {
+    params
+});
+//根据mvid获取mvurl地址
+export const requireMvUrlById = (params) => axios.get("api/mv/url", {
+    params
+});
+//根据mvid获取详细mv地址
+export const requireMvInfoById = (params) => axios.get("api/mv/detail", {
+    params
+});
 
 
 

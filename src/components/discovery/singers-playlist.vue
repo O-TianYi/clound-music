@@ -1,6 +1,24 @@
 <template>
   <div class="main">
-    <header>头像部分{{singerInfo.name}}</header>
+    <header>
+      <div class="image">
+        <img :src="singerInfo.artist.picUrl" alt height="300px" v-if="singerInfo" />
+      </div>
+      <div class="info">
+        <p>
+          <span class="left">
+            <span class="babel">歌手</span>
+            {{singerInfo.artist.name}}
+          </span>
+          <span class="right">收藏</span>
+        </p>
+        <p>
+          <span>单曲数：{{singerInfo.artist.musicSize}}</span>
+          <span>专辑数：{{singerInfo.hotAlbums.length}}</span>
+          <span>MV数：{{singerMV.length}}</span>
+        </p>
+      </div>
+    </header>
     <main class="content">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="专辑" name="1">
@@ -37,7 +55,9 @@
             </li>
           </ul>
         </el-tab-pane>
-        <el-tab-pane label="MV" name="2">MV</el-tab-pane>
+        <el-tab-pane label="MV" name="2">
+          <mvList :data="singerMV" />
+        </el-tab-pane>
         <el-tab-pane label="歌手详情" name="3">歌手详情</el-tab-pane>
         <el-tab-pane label="相似歌手" name="4">相似歌手</el-tab-pane>
       </el-tabs>
@@ -46,17 +66,28 @@
 </template>
 
 <script>
-import { requireSingerPlayLists, requireSingerSongs } from "../../api";
+import {
+  requireSingerPlayLists,
+  requireSingerSongs,
+  requireSingerMV,
+} from "../../api";
 import { changDate } from "../../plugins/common";
 export default {
+  components: {
+    mvList: (resolve) => {
+      require(["../common/mvList"], resolve);
+    },
+  },
   mounted() {
     console.log(this.$route.params.id);
     this.getSingerPlayLists(this.$route.params.id);
+    this.getSingerMV(this.$route.params.id);
   },
   data() {
     return {
       activeName: "1",
       singerInfo: {}, //专辑歌单列表
+      singerMV: [], //获取歌手 的所有mv
     };
   },
   methods: {
@@ -89,6 +120,11 @@ export default {
         });
       }
     },
+    //获取歌手所有mv---参数为歌手id
+    async getSingerMV(id) {
+      let result = await requireSingerMV({ id: id, limit: 100 });
+      this.singerMV = result.data.mvs;
+    },
 
     //点击对应的菜单切换
     handleClick(tab) {
@@ -109,7 +145,39 @@ export default {
 <style lang="scss" scoped>
 .main {
   header {
-    // height: 80px;
+    @include flex-general(row, flex-start, flex-start);
+    padding: 10px 20px;
+    .image {
+      margin-right: 20px;
+    }
+    .info {
+      flex: 1;
+      p:nth-child(1) {
+        @include flex-between;
+        align-items: flex-start;
+        margin-bottom: 30px;
+        .left {
+          font-size: 25px;
+          .babel {
+            display: inline-block;
+            background-color: #c62f2f;
+            padding: 3px 10px;
+            border-radius: 3px;
+            color: white;
+            font-size: 14px;
+            transform: translateY(-5px);
+          }
+        }
+        .right {
+          border: 1px solid black;
+          padding: 5px;
+          border-radius: 3px;
+        }
+      }
+      p:nth-child(2) {
+        @include flex-general(column, flex-start, flex-start);
+      }
+    }
   }
   .content {
     .el-tabs {
