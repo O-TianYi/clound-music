@@ -107,7 +107,18 @@
             </li>
           </ul>
         </el-tab-pane>
-        <el-tab-pane label="相似歌手" name="4">相似歌手</el-tab-pane>
+        <el-tab-pane label="相似歌手" name="4">
+          <ul class="like-singers">
+            <li v-for="item in SimiSingers" :key="item.id" @click="getOtherSinger(item)">
+              <el-image :src="item.picUrl" lazy fit="fill" style="width:100%;">
+                <div slot="placeholder" class="image-slot">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </el-image>
+              <span>{{item.name}}</span>
+            </li>
+          </ul>
+        </el-tab-pane>
       </el-tabs>
     </main>
   </div>
@@ -120,13 +131,17 @@ import {
   requireSingerMV,
   requireSingerHotSongsById,
   requireSingerDescById,
+  requireSimiSingers,
 } from "../../api";
 import { changDate } from "../../plugins/common";
+import mvList from "../common/mvList";
 export default {
   components: {
-    mvList: (resolve) => {
-      require(["../common/mvList"], resolve);
-    },
+    mvList,
+
+    // mvList: (resolve) => {
+    //   require(["../common/mvList"], resolve);
+    // },
   },
   mounted() {
     console.log(this.$route.params.id);
@@ -134,6 +149,7 @@ export default {
     this.getSingerMV(this.$route.params.id);
     this.getHotSongs(this.$route.params.id);
     this.getSingerDesc(this.$route.params.id);
+    this.getSimiSingers(this.$route.params.id);
   },
   data() {
     return {
@@ -147,6 +163,7 @@ export default {
       singerMV: [], //获取歌手 的所有mv
       singerDesc: [], //歌手详细信息
       hotSongs: [], //热门50首歌曲
+      SimiSingers: [], //相似歌手数组
     };
   },
   methods: {
@@ -209,6 +226,14 @@ export default {
       let tempStr2 = this.singerDesc.introduction[2].txt.split("\n");
       this.singerDesc.introduction[2].txtlists = tempStr2;
     },
+    //根据歌手id获取相似的歌手
+    async getSimiSingers(id) {
+      let result = await requireSimiSingers({
+        id: id,
+        cookie: localStorage.getItem("cookie"),
+      });
+      this.SimiSingers = result.data.artists;
+    },
 
     //点击对应的菜单切换
     handleClick(tab) {
@@ -221,6 +246,14 @@ export default {
     },
     ClickCell(row) {
       console.log("单击歌单列表", row.id);
+    },
+    //获取其他歌手信息
+    getOtherSinger(item) {
+      this.getSingerPlayLists(item.id);
+      this.getSingerMV(item.id);
+      this.getHotSongs(item.id);
+      this.getSingerDesc(item.id);
+      this.getSimiSingers(item.id);
     },
   },
 };
@@ -314,6 +347,17 @@ export default {
               padding: 5px;
               line-height: 20px;
             }
+          }
+        }
+      }
+      .like-singers {
+        @include flex-general(row, flex-start, flex-start);
+        flex-wrap: wrap;
+        li {
+          @include flex-wrap-li(18.4%, 2%);
+          flex-direction: column;
+          &:nth-child(5n + 1) {
+            margin: 0;
           }
         }
       }

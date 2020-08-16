@@ -13,7 +13,7 @@
         <video
           src="http://vodkgeyttp8.vod.126.net/cloudmusic/17ac/core/93cf/855746d5d3ab09904a939ae4eaf0dfb6.mp4?wsSecret=97dc1c20f200288e662d53c555958733&wsTime=1597415399"
           height="414"
-          width="720"
+          width="100%"
           controls
         >当前浏览器不止video标签，请更新浏览器或者更换浏览器</video>
       </div>
@@ -23,13 +23,17 @@
         <div class="share">分享</div>
         <div class="download">下载MV</div>
       </div>
-      <Comments />
     </main>
+    <Comments :data="mvComments" />
   </div>
 </template>
 
 <script>
-import { requireMvUrlById, requireMvInfoById } from "../../api";
+import {
+  requireMvUrlById,
+  requireMvInfoById,
+  requireMVComments,
+} from "../../api";
 import { changAuthor } from "../../plugins/common";
 import Comments from "./comments";
 export default {
@@ -40,6 +44,7 @@ export default {
     console.log("接收的mvid为", this.$route.params.id);
     this.getMvUrlById(this.$route.params.id);
     this.getMvInfoById(this.$route.params.id);
+    this.getMvComments(this.$route.params.id);
   },
   data() {
     return {
@@ -49,6 +54,7 @@ export default {
           artists: [],
         },
       }, //mv的详细信息
+      mvComments: [], //mv所有评论
     };
   },
   methods: {
@@ -63,6 +69,11 @@ export default {
       this.mvinfo = result.data;
       console.log(result.data);
     },
+    //获取mv评论
+    async getMvComments(mvid) {
+      let result = await requireMVComments({ id: mvid, limit: 2 });
+      this.mvComments = result.data.comments;
+    },
 
     //格式化名称
     changAuthor(artists) {
@@ -74,7 +85,8 @@ export default {
 
 <style lang="scss" scoped>
 .main {
-  width: 60%;
+  // background-color: red;
+  width: 50%;
   margin: 0 auto;
   margin-top: 50px;
   header {

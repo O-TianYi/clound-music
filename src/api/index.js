@@ -66,11 +66,22 @@ export const requireMvInfoById = (params) => axios.get("api/mv/detail", {
 export const requireSingerDescById = (params) => axios.get("api/artist/desc", {
     params
 });
-
 //根据歌手热门前50首歌曲
 export const requireSingerHotSongsById = (params) => axios.get("api/artist/top/song", {
     params
 });
+//根据歌手id获取相似歌手
+export const requireSimiSingers = (params) => axios.get("api/simi/artist", {
+    params
+});
+//获取mv评论
+export const requireMVComments = (params) => axios.get("api/comment/mv", {
+    params
+});
+
+
+
+
 
 
 //发现音乐----排行榜
