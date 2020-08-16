@@ -23,6 +23,38 @@
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="专辑" name="1">
           <ul>
+            <!-- 热门50首 -->
+            <li>
+              <div class="left">
+                <img src alt width="200px" height="200px" />
+                <p>2020-01-01</p>
+              </div>
+              <div class="right">
+                <p>
+                  <span>热门50首</span>
+                  <span>
+                    <i class="iconfont icon-aixin"></i>
+                    <i class="iconfont icon-xiazai"></i>
+                  </span>
+                </p>
+                <el-table
+                  :data="hotSongs"
+                  stripe
+                  style="width: 100%"
+                  :show-header="false"
+                  @cell-dblclick="dbClickCell"
+                >
+                  <el-table-column prop="index" width="100"></el-table-column>
+                  <el-table-column width="150">
+                    <i class="iconfont icon-aixin"></i>
+                    <i class="iconfont icon-xiazai"></i>
+                  </el-table-column>
+                  <el-table-column prop="name"></el-table-column>
+                  <el-table-column prop="time" width="100" align="right"></el-table-column>
+                </el-table>
+              </div>
+            </li>
+            <!-- 专辑内容 -->
             <li v-for="(item,index) in singerInfo.hotAlbums" :key="index">
               <div class="left">
                 <img :src="item.blurPicUrl" alt width="200px" height="200px" />
@@ -58,7 +90,23 @@
         <el-tab-pane label="MV" name="2">
           <mvList :data="singerMV" />
         </el-tab-pane>
-        <el-tab-pane label="歌手详情" name="3">歌手详情</el-tab-pane>
+        <el-tab-pane label="歌手详情" name="3">
+          <ul class="singer-desc">
+            <li>
+              <h5>歌手简介</h5>
+              <p>{{singerDesc.briefDesc}}</p>
+            </li>
+            <li v-for="(item,index) in singerDesc.introduction" :key="index">
+              <h5>{{item.ti}}</h5>
+              <ul v-if="item.txtlists" class="txt-lists">
+                <li v-for="(item,index) in item.txtlists" :key="index">
+                  <p>{{item}}</p>
+                </li>
+              </ul>
+              <p v-else>{{item.txt}}</p>
+            </li>
+          </ul>
+        </el-tab-pane>
         <el-tab-pane label="相似歌手" name="4">相似歌手</el-tab-pane>
       </el-tabs>
     </main>
@@ -70,6 +118,8 @@ import {
   requireSingerPlayLists,
   requireSingerSongs,
   requireSingerMV,
+  requireSingerHotSongsById,
+  requireSingerDescById,
 } from "../../api";
 import { changDate } from "../../plugins/common";
 export default {
@@ -82,12 +132,21 @@ export default {
     console.log(this.$route.params.id);
     this.getSingerPlayLists(this.$route.params.id);
     this.getSingerMV(this.$route.params.id);
+    this.getHotSongs(this.$route.params.id);
+    this.getSingerDesc(this.$route.params.id);
   },
   data() {
     return {
       activeName: "1",
-      singerInfo: {}, //专辑歌单列表
+      singerInfo: {
+        artist: {
+          picUrl: "",
+        },
+        hotAlbums: [],
+      }, //专辑歌单列表
       singerMV: [], //获取歌手 的所有mv
+      singerDesc: [], //歌手详细信息
+      hotSongs: [], //热门50首歌曲
     };
   },
   methods: {
@@ -124,6 +183,31 @@ export default {
     async getSingerMV(id) {
       let result = await requireSingerMV({ id: id, limit: 100 });
       this.singerMV = result.data.mvs;
+    },
+    //获取歌手热门前50首歌曲
+    async getHotSongs(id) {
+      let result = await requireSingerHotSongsById({ id: id });
+      this.hotSongs = result.data.songs;
+      let i = 0;
+      this.hotSongs.forEach((val) => {
+        i++;
+        if (i >= 10) {
+          val.index = i;
+        } else {
+          val.index = "0" + i;
+        }
+        val.time = changDate(val.dt);
+      });
+    },
+    //获取歌手详细信息
+    async getSingerDesc(id) {
+      let result = await requireSingerDescById({ id: id });
+      this.singerDesc = result.data;
+      //切割字符串
+      let tempStr1 = this.singerDesc.introduction[1].txt.split("\n");
+      this.singerDesc.introduction[1].txtlists = tempStr1;
+      let tempStr2 = this.singerDesc.introduction[2].txt.split("\n");
+      this.singerDesc.introduction[2].txtlists = tempStr2;
     },
 
     //点击对应的菜单切换
@@ -205,6 +289,30 @@ export default {
                   @include text-ellipsis;
                 }
               }
+            }
+          }
+        }
+      }
+      .singer-desc {
+        h5 {
+          margin-bottom: 10px;
+        }
+        li {
+          @include flex-general(column, flex-start, flex-start);
+          p {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 30px;
+            text-align: justify;
+            text-indent: 2em;
+          }
+          .txt-lists {
+            // padding: 10px;
+            // padding-left: 30px;
+            li {
+              @include flex-general(column, flex-start, flex-start);
+              padding: 5px;
+              line-height: 20px;
             }
           }
         }

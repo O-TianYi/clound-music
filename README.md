@@ -453,10 +453,12 @@ js解决办法---就算是vue中也只需要使用该方法，没有@selectstart
 <ul :class="data.length>5?'ul-more':'ul-less'"></ul>
 ````
 
-##### 文字间距
+##### 文字设置
 
 ```
 letter-spacing:2px
+text-indent: 2em;//首行缩进
+text-align: justify;//两端对齐
 ```
 
 ##### 输入框聚焦把提示内容清空
