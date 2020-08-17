@@ -19,37 +19,46 @@
               <div class="collection" type="text">收藏全部</div>
             </div>
           </div>
+          <RecycleScroller
+            class="lists"
+            :items="lastestSongs"
+            key-field="id"
+            :item-size="100"
+            v-slot="{ item }"
+          >
+            <li @click="selectMusic(item.id)">
+              <!-- <div class="rank">{{index+1>9?index+1:'0'+(index+1)}}</div> -->
+              <div class="sing-info">
+                <el-image
+                  :src="item.album.picUrl"
+                  lazy
+                  fit="fill"
+                  style="width: 60px; height: 60px;margin-right: 10px;padding: 0;"
+                >
+                  <div slot="placeholder" class="image-slot">
+                    <i class="el-icon-picture-outline"></i>
+                  </div>
+                </el-image>
+                <span>{{item.name}}{{item.alias.length!==0?`（${item.alias[0]}）`:''}}</span>
+              </div>
+              <div class="singer-name">{{changAuthor(item.artists)}}</div>
+              <div class="form">{{item.name}}{{item.alias.length!==0?`（${item.alias[0]}）`:''}}</div>
+              <!-- <div class="time">{{changDate(item.bMusic.playTime)}}</div> -->
+            </li>
+          </RecycleScroller>
         </div>
-        <ul class="lists">
-          <li v-for="(item,index) in lastestSongs" :key="index" @click="selectMusic(item.id)">
-            <div class="rank">{{index+1>9?index+1:'0'+(index+1)}}</div>
-            <div class="sing-info">
-              <el-image
-                :src="item.album.picUrl"
-                lazy
-                fit="fill"
-                style="width: 60px; height: 60px;margin-right: 10px;padding: 0;"
-              >
-                <div slot="placeholder" class="image-slot">
-                  <i class="el-icon-picture-outline"></i>
-                </div>
-              </el-image>
-              <span>{{item.name}}{{item.alias.length!==0?`（${item.alias[0]}）`:''}}</span>
-            </div>
-            <div class="singer-name">{{changAuthor(item.artists)}}</div>
-            <div class="form">{{item.name}}{{item.alias.length!==0?`（${item.alias[0]}）`:''}}</div>
-            <!-- <div class="time">{{changDate(item.bMusic.playTime)}}</div> -->
-          </li>
-        </ul>
       </el-card>
     </main>
   </div>
 </template>
 
 <script>
+// import { RecycleScroller } from "vue-virtual-scroller";
+// Vue.component("RecycleScroller", RecycleScroller);
 import { requireLastestSongs } from "../../api/index";
 import { changAuthor, changDate } from "../../plugins/common"; //引入多作者拼接转换方法
 export default {
+  // components: { RecycleScroller },
   mounted() {
     this.getLastestSongs(0);
   },
@@ -126,6 +135,8 @@ export default {
       }
 
       .lists {
+        height: 600px;
+        overflow-y: auto;
         @include flex-general(column, flex-start);
         li {
           padding: 0 20px;

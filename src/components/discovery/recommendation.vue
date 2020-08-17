@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <el-carousel type="card" height="200px">
+    <el-carousel type="card" height="150px">
       <el-carousel-item v-for="(item,index) in banners" :key="index">
         <el-image :src="item.imageUrl" lazy fit="fill">
           <div slot="placeholder" class="image-slot">
@@ -11,7 +11,7 @@
     </el-carousel>
 
     <div class="content">
-      <List :data="recommend" title="推荐音乐" />
+      <List :data="recommend" title="推荐音乐" todayrecommend="true" />
       <List :data="exclusives" title="独家放送" />
       <List1 :data="newSongs" title="每日最新" />
     </div>
@@ -51,6 +51,7 @@ export default {
       recommend: [], //推荐歌曲
       exclusives: [], //独家放送
       newSongs: [], //每日新歌
+      todadyRecommendSongs: [], //获取每日推荐歌曲
     };
   },
   methods: {

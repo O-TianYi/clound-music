@@ -13,6 +13,19 @@ Vue.config.productionTip = false;
 //导入axios
 // import axios from 'axios'
 
+//引入无限滚列表组件--目的避免大量数据同时渲染造成的性能地低问题
+import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
+import VueVirtualScroller from "vue-virtual-scroller";
+import {
+  RecycleScroller
+} from "vue-virtual-scroller";
+Vue.use(VueVirtualScroller);
+Vue.use(RecycleScroller);
+
+
+
+
+
 //建立$bus传递数据
 Vue.prototype.$bus = new Vue();
 

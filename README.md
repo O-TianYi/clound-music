@@ -544,3 +544,58 @@ data() {
 宽和边距使用百分比来解决，这样原来是怎么样布局，缩放也是怎么样的，不会突出很多。
 ```
 
+
+
+
+
+
+
+
+
+
+
+
+
+#### 优化
+
+[参考](https://github.com/Akryum/vue-virtual-scroller)
+
+使用vue-virtual-scroller来进行虚拟化加载
+
++ 安装`npm install -D vue-virtual-scroller`
+
++ main.js引入
+
+  ```
+  import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
+  import VueVirtualScroller from "vue-virtual-scroller";
+  import {
+    RecycleScroller
+  } from "vue-virtual-scroller";
+  Vue.use(VueVirtualScroller);
+  Vue.use(RecycleScroller);
+  
+  
+  //RecycleScroller部分也可以在对应的使用组件上使用
+  ```
+
++ 使用
+
+  ```
+  <RecycleScroller
+      class="lists"//自定义的类，需要定义高度否则就是所有渲染
+      :items="lastestSongs"//渲染的数据
+      key-field="id"
+      :item-size="100"//每个item的高度
+      v-slot="{ item }"//items数组的一个item
+  >
+  //使用item.xxx直接使用即可
+  </RecycleScroller>    
+  ```
+
++ 检测是否成功
+
+  打开控制台查看对应的渲染节点数量是否没有一次过全部显示就说明成功过，即例如需要渲染的数据是100个，但是你在elemth查看只有十多个dom节点，即说明引用成功。
+
++ 注意点：必须给RecycleScroller定义一个class来设定高度，否则就是全部数据渲染显示，即会出现很多个dom节点。
+

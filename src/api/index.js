@@ -25,6 +25,10 @@ export const requireRecommmend = (params) => axios.get("api/personalized", {
 export const requirePrivatecontent = () => axios.get("api/personalized/privatecontent");
 //每日新歌
 export const requireNewSongs = () => axios.get("api/personalized/newsong");
+//根据用户id获取今天推荐歌单
+export const requireTodadyRecommendSongs = (params) => axios.get("api/recommend/songs", {
+    params
+});
 
 
 
