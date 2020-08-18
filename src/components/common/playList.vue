@@ -1,6 +1,20 @@
 <template>
   <div class="main">
-    <header>标题不部分</header>
+    <header>
+      <div class="today" v-if="todayrecommend">
+        <div class="left">
+          <div>
+            <span>{{getWeekDay()}}</span>
+            <span>{{getDay()}}</span>
+          </div>
+        </div>
+        <div class="right">
+          <p>每日歌单推荐</p>
+          <p>根据你的音乐口味生成，每天6:00更新</p>
+        </div>
+      </div>
+      <div class="other" v-else>普通歌单</div>
+    </header>
     <main class="body">
       <el-table
         :data="todadyRecommendSongs"
@@ -50,7 +64,12 @@
 
 <script>
 import { requirePlayListsById, requireTodadyRecommendSongs } from "../../api";
-import { changDate, changAuthor } from "../../plugins/common";
+import {
+  changDate,
+  changAuthor,
+  getWeekDay,
+  getDay,
+} from "../../plugins/common";
 export default {
   created() {
     console.log(this.$route.params.id, this.$route.params.todayrecommend);
@@ -117,6 +136,14 @@ export default {
       console.log("推荐歌曲", this.todadyRecommendSongs);
     },
 
+    //获取推荐的星期和具体天
+    getDay() {
+      return getDay();
+    },
+    getWeekDay() {
+      return getWeekDay();
+    },
+
     //点击对应的一个tab
     handleClick(tab) {
       console.log(this.activeName, tab.name);
@@ -135,6 +162,30 @@ export default {
 
 <style lang="scss" scoped>
 header {
+  .today {
+    @include flex-between;
+    align-items: flex-start;
+    .left {
+      div {
+        @include flex-general(column, center, center);
+        margin-bottom: 10px;
+        padding: 10px 20px 0 20px;
+        border: 1px solid black;
+        span {
+          &:nth-child(2) {
+            font-size: 70px;
+            color: $theme-color;
+          }
+        }
+      }
+    }
+    .right {
+      flex: 1;
+      padding-left: 20px;
+    }
+  }
+  .other {
+  }
 }
 .body {
   /deep/ .el-tabs__nav-scroll {
