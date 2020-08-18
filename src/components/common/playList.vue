@@ -1,6 +1,7 @@
 <template>
   <div class="main">
     <header>
+      <!-- 每日推荐的歌单头部 -->
       <div class="today" v-if="todayrecommend">
         <div class="left">
           <div>
@@ -13,9 +14,35 @@
           <p>根据你的音乐口味生成，每天6:00更新</p>
         </div>
       </div>
-      <div class="other" v-else>普通歌单</div>
+      <!-- 普通列表的头部 -->
+      <div class="other" v-else>
+        <div class="left">
+          <img :src="titleInfo.coverImgUrl" width="200px" alt />
+        </div>
+        <div class="right">
+          <div class="title">
+            <div class="playlist">
+              <span>歌单{{titleInfo.name}}</span>
+              <span>网易云音乐 {{getDate1(titleInfo.createTime)}}创建</span>
+            </div>
+            <div class="playtime">歌曲数{{titleInfo.trackCount}}|播放数{{getNumber(titleInfo.playCount)}}</div>
+          </div>
+          <div class="options">
+            <span>播放全部</span>
+            <span>收藏({{titleInfo.subscribedCount}})</span>
+            <span>分享({{titleInfo.shareCount}})</span>
+            <span>下载全部</span>
+          </div>
+          <div class="info">
+            <p>标签：{{titleInfo.tags.join('/')}}</p>
+            <p>简介：{{titleInfo.description.split('\n')[0]}}</p>
+            <p>{{titleInfo.description.split('\n')[1]}}</p>
+          </div>
+        </div>
+      </div>
     </header>
     <main class="body">
+      <!-- 每日推荐歌单主题部分 -->
       <el-table
         :data="todadyRecommendSongs"
         stripe
@@ -35,6 +62,7 @@
         <el-table-column prop="altime" label="时长" width="100"></el-table-column>
       </el-table>
 
+      <!-- 普通歌单的主体部分 -->
       <el-tabs v-model="activeName" @tab-click="handleClick" v-else>
         <el-tab-pane label="歌曲列表" name="1">
           <el-table
@@ -69,6 +97,8 @@ import {
   changAuthor,
   getWeekDay,
   getDay,
+  changDate1,
+  getNumber,
 } from "../../plugins/common";
 export default {
   created() {
@@ -88,6 +118,7 @@ export default {
       activeName: "1",
       playList: [], //渲染的歌单
       todadyRecommendSongs: [], //推荐歌单
+      titleInfo: {}, //标题信息
     };
   },
   methods: {
@@ -95,6 +126,7 @@ export default {
     async getPlayListsById(id) {
       let result = await requirePlayListsById({ id: id });
       this.playList = result.data.playlist.tracks;
+      this.titleInfo = result.data.playlist;
       //添加index属性---格式化时间---格式豪华作者名称
       for (let i = 0; i < this.playList.length; i++) {
         //格式化作者名称
@@ -143,6 +175,14 @@ export default {
     getWeekDay() {
       return getWeekDay();
     },
+    //将时间格式化年月日
+    getDate1(date) {
+      return changDate1(date);
+    },
+    //单位换算
+    getNumber(number) {
+      return getNumber(number);
+    },
 
     //点击对应的一个tab
     handleClick(tab) {
@@ -185,6 +225,40 @@ header {
     }
   }
   .other {
+    @include flex-between;
+    align-items: flex-start;
+    .left {
+    }
+    .right {
+      padding: 10px 30px;
+      flex: 1;
+      @include flex-general(column, flex-start, flex-start);
+      .title {
+        flex: 1;
+        width: 100%;
+        @include flex-between;
+        align-items: flex-start;
+        .playlist {
+          @include flex-general(column, flex-start, flex-start);
+          font-size: 20px;
+        }
+        .playtime {
+          flex: 1;
+          text-align: right;
+        }
+      }
+      .options {
+        margin: 30px 0;
+        span {
+          margin-right: 10px;
+          padding: 2px;
+          border: 1px solid black;
+        }
+      }
+
+      .info {
+      }
+    }
   }
 }
 .body {

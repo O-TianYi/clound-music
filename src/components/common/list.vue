@@ -10,11 +10,21 @@
         <span>每日歌曲推荐</span>
       </li>
       <li v-for="(item,index) in data" :key="index" @click="goPlayList(item)">
-        <el-image :src="item.picUrl" lazy fit="fill">
-          <div slot="placeholder" class="image-slot">
-            <i class="el-icon-picture-outline"></i>
-          </div>
-        </el-image>
+        <div class="img">
+          <el-image :src="item.picUrl" lazy fit="fill">
+            <div slot="placeholder" class="image-slot">
+              <i class="el-icon-picture-outline"></i>
+            </div>
+          </el-image>
+          <span v-if="item.playCount" class="play-count">
+            <i class="iconfont icon-tubiaozhizuomobanyihuifu-"></i>
+            {{getNumber(item.playCount)}}
+          </span>
+          <span v-else class="video">
+            <i class="iconfont icon-video" style="font-size: 25px;font-weight: bolder;"></i>
+          </span>
+        </div>
+
         <span>{{item.name}}</span>
       </li>
     </ul>
@@ -22,7 +32,7 @@
 </template>
 
 <script>
-import { getDay, getWeekDay } from "../../plugins/common";
+import { getDay, getWeekDay, getNumber } from "../../plugins/common";
 export default {
   props: ["title", "data", "todayrecommend"],
   methods: {
@@ -44,6 +54,9 @@ export default {
     },
     getWeekDay() {
       return getWeekDay();
+    },
+    getNumber(number) {
+      return getNumber(number);
     },
   },
 };
@@ -74,8 +87,19 @@ export default {
       flex: 1;
       padding-left: 20px;
       padding-bottom: 20px;
-      &:nth-child(1) {
-        padding-left: 0;
+      &:nth-child(2) {
+        padding: 0;
+      }
+      .img {
+        position: relative;
+        .video {
+          background-color: rgba(0, 0, 0, 0.2);
+          position: absolute;
+          left: 0;
+          top: 0;
+          color: white;
+          margin: 5px;
+        }
       }
     }
   }
@@ -86,6 +110,18 @@ export default {
     li {
       width: 18%;
       padding-bottom: 20px;
+      .img {
+        width: 100%;
+        position: relative;
+        .play-count {
+          background-color: rgba(0, 0, 0, 0.3);
+          position: absolute;
+          right: 0;
+          top: 0;
+          color: white;
+          margin: 5px;
+        }
+      }
       &:nth-child(1) {
         padding-left: 0;
       }

@@ -64,6 +64,7 @@ export default {
     async getRecommmend() {
       let result = await requireRecommmend({ limit: 10 });
       this.recommend = result.data.result;
+      this.recommend.pop(); //删除数组的最后一个元素
     },
     //独家放送
     async getPrivatecontent() {
