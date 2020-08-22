@@ -4,7 +4,7 @@
     <div class="content">
       <div class="aside">
         <Aside :data="asideData" title="推荐" class="aside-item" />
-        <Aside :data="asideData1" title="我的音乐" class="aside-item" />
+        <!-- <Aside :data="asideData1" title="我的音乐" class="aside-item" /> -->
       </div>
       <div class="router-view">
         <router-view />
@@ -24,7 +24,7 @@ export default {
       title1: "推荐",
       asideData: [
         { id: "1", name: "发现音乐", icon: "icon-yinle", route: "discovery" },
-        { id: "2", name: "推荐音乐", icon: "icon-yinle", route: "recommend" },
+        { id: "2", name: "我的音乐", icon: "icon-yinle", route: "mymusic" },
         { id: "3", name: "直播", icon: "icon-video", route: "live" },
         { id: "4", name: "MV", icon: "icon-MV", route: "mv" },
       ],
